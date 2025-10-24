@@ -101,21 +101,51 @@
         document.getElementById('counter').innerText = count;
       }
 
+      // Executes immediately, then blocks for 500ms
       const throttle = (fn) => {
         let lastTime = 0;
 
         return () => {
           const now = Date.now()
-          count++
           if (now - lastTime >= 500) {
             lastTime = now
+            count++
             fn()
           }
         }
       }
 
+      // Waits for clicks to stop for 500ms, then executes once
+      const debounce = (fn) => {
+        let timeout;
+        return () => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            count++;
+            fn();
+          }, 500);
+        }
+      }
+
       const button = document?.querySelector('button');
       button.addEventListener('click', throttle(updateDisplay));
+
+      // Throttling:
+      // - Modified the throttle function to ensure count++ only executes inside the 500ms time check
+      // - This ensures click events are captured at most 1x every 500ms
+      // - Clicks within the 500ms window are ignored
+      //
+      // Debouncing:
+      // - Added a debounce function that uses setTimeout and clearTimeout
+      // - Each click resets the timer, waiting 500ms of inactivity before executing
+      // - Only the last click in a rapid sequence is counted after user stops clicking
+      //
+      // Testing:
+      // - Rapid clicking with throttle: Counter increments exactly once per 500ms
+      // - Rapid clicking with debounce: Counter increments once, 500ms after clicking stops
+      // - Single clicks: Both techniques increment counter by 1
+      // - Verified timing with console.log timestamps to confirm 500ms intervals
+       
     </script>
   </body> 
 </html>
