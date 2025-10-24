@@ -118,6 +118,7 @@
       // Waits for clicks to stop for 500ms, then executes once
       const debounce = (fn) => {
         let timeout;
+        
         return () => {
           clearTimeout(timeout);
           timeout = setTimeout(() => {
